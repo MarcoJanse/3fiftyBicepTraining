@@ -1,12 +1,29 @@
-resource storageAccount 'Microsoft.Storage/storageAccounts@2024-01-01' = {
-  name: 'stmaja3fiftylab001'
+@minLength(1)
+param name string
+
+@allowed([
+  'Standard_LRS'
+  'Standard_ZRS'
+]
+)
+param sku string
+
+@allowed([
+  'Hot'
+  'Cool'
+  'Cold'
+])
+param accessTier string
+
+resource storageAccount 'Microsoft.Storage/storageAccounts@2018-11-01' = {
+  name: 'st${name}'
   location: resourceGroup().location
   sku: {
-    name: 'Standard_LRS'
+    name: sku
   }
   kind: 'StorageV2'
   properties:{
-    accessTier: 'Cool'
+    accessTier: accessTier
     allowBlobPublicAccess: false
     minimumTlsVersion: 'TLS1_2'
   }
