@@ -13,7 +13,10 @@ param parLocation string = 'northeurope'
 ])
 param parContainerRegistrySku string = 'basic'
 
-param parStorageAccountName string = 'stmarjtst001'
+param parStorageAccountNames array = [
+  'stmarjicttst001'
+  'stmarjicttst002'
+]
 
 @allowed([
   'Standard_LRS'
@@ -35,10 +38,15 @@ module cr 'modules/containerRegistry.bicep' = {
   }
 }
 
-module st 'br:crmarjtst.azurecr.io/bicepmodules/storageaccount:v1.0.0' = {
+module st 'br:crmarjtst.azurecr.io/bicepmodules/storageaccount:v1.0.1' = [for storageAccountName in parStorageAccountNames: {
   params: {
-    name: parStorageAccountName
+    name: storageAccountName
     sku:parStorageAccountSku
     accessTier: parStorageAccountAccessTier
   }
-}
+}]
+
+output storageAccounts array = [for (name, i) in parStorageAccountNames: {
+  name: st[i].outputs.outStorageAccountName
+  id: st[i].outputs.outStorageAccountId
+}]

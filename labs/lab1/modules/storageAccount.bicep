@@ -1,7 +1,7 @@
 @metadata({
   name: 'storageAccount.bicep'
   description: 'A module for deploying an Azure storage account'
-  version: '1.0.0'
+  version: '1.0.1'
 })
 
 @minLength(1)
@@ -41,3 +41,6 @@ resource storageAccount 'Microsoft.Storage/storageAccounts@2024-01-01' = {
     minimumTlsVersion: 'TLS1_2'
   }
 }
+
+output outStorageAccountName string = storageAccount.name
+output outStorageAccountId string = storageAccount.id
